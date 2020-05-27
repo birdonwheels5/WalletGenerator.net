@@ -4,25 +4,25 @@ To use, please follow the following instructions:
 
 1) Download the ZIP file for this repository.
 
-2) Disconnect your internet, and make sure your printer is connected.
+2) Visit this link: <a href="https://laboratory.kin.org/#account-creator?network=public" target="_blank">https://laboratory.kin.org/#account-creator?network=public</a>
 
-3) Extract the zip file you downloaded.
+3) Disconnect your internet, and make sure your printer is connected.
 
-3) Open "Kin Laboratory.html" in your web browser from the extracted files.
+4) Press the "Generate Keypair" button in the page you opened in step 2. Keep this page open, you will be copying these keys in the coming steps.
 
-4) Press the "Generate Keypair" button. Keep this page open, you will be copying these keys in the coming steps.
+5) Extract the zip file you downloaded.
 
-5) Open "index.html" in your web browser from the extracted files.
+6) Open "index.html" in your web browser from the extracted files.
 
-6) Select KIN as your currency (In the lower right-hand side of the page).
+7) Select KIN as your currency (In the lower right-hand side of the page).
 
-7) Select "Skip" for the random key generator, you will not be using it.
+8) Select "Skip" for the random key generator, you will not be using it.
 
-8) Click "Paper Wallet" towards the top of the page.
+9) Click "Paper Wallet" towards the top of the page.
 
-9) Copy your public/private keys from step 4 into the corresponding fields on the page.
+10) Copy your public/private keys from step 4 into the corresponding fields on the page.
 
-10) Click Apply, and then print.
+11) Click Apply, and then print.
 
 
 
