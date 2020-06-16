@@ -52,6 +52,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   -->
 
   <title>WalletGenerator.net - Universal Paper wallet generator for Bitcoin and other cryptocurrencies</title>
+  
 
   <script type="text/javascript">
 // Array.prototype.map function is in the public domain.
@@ -9950,7 +9951,7 @@ Walletgenerator.net use the same security measures as the original project. All-
             <br/>
             <input type="button" id="papergenerate" value="Randomly generate" onclick="ninja.wallets.paperwallet.build(document.getElementById('paperpassphrase').value);" />
             <span>OR</span>
-            <input placeholder="Enter your own WIF PUBLIC key" id="suppliedPublicKey" name="suppliedPublicKey" spellcheck="false" />&nbsp;
+            <!--<input placeholder="Enter your own WIF PUBLIC key" id="suppliedPublicKey" name="suppliedPublicKey" spellcheck="false" />&nbsp;-->
             <input placeholder="Enter your own WIF private key" id="suppliedPrivateKey" name="suppliedPrivateKey" spellcheck="false" />&nbsp;
             
             <input type="button" id="papergenerate" value="Apply &raquo;" onClick="ninja.wallets.paperwallet.testAndApplyVanityKey();" />
@@ -11233,7 +11234,7 @@ ninja.toggleFaqQuestion = function (elementId) {
 };
   </script>
   <script type="text/javascript">
-  var ts = new Date();
+  
   
 ninja.translator = {
 	currentCulture: "en",
@@ -11313,7 +11314,7 @@ ninja.translator = {
 	"securitychecklistofflineNOK": "You appear to be running this generator off of a live website, which is not recommended for creating valuable wallets. Instead, use the download link at the bottom of this page to download the ZIP file from GitHub and run this generator offline as a \'local\' HTML file.",
 	"securitychecklistofflineOK": "You are running this generator from your own download.",
     
-	"paperwalletback": "<ul><li>To fund this paper wallet, send KIN to its public address, anytime after visiting the account activation link to the left.</li><li><b>DO NOT REVEAL THE PRIVATE KEY</b> until you are ready to send the balance on this wallet to an app, exchange or other wallet.</li></ul><b>Amount :</b> ___________ &nbsp; &nbsp; &nbsp; <br /><b>Date :</b> " +  ts.toLocaleString() + "<br /><b>Notes :</b>  ____________________________",
+	"paperwalletback": "<ul><li>To fund this paper wallet, send KIN to its public address, anytime after visiting the account activation link to the left.</li><li><b>DO NOT REVEAL THE PRIVATE KEY</b> until you are ready to send the balance on this wallet to an app, exchange or other wallet.</li></ul><b>Amount :</b> ___________ &nbsp; &nbsp; &nbsp; <br /><b>Date :</b>  <span id='text_date'> </span><br /><b>Notes :</b>  ____________________________",
 },
 
 		﻿"fr": {
@@ -12237,6 +12238,8 @@ ninja.wallets.singlewallet = {
 	}
 };
   </script>
+  
+  <script src="stellar-sdk-3.0.3.js"></script>
   <script type="text/javascript">
 ninja.wallets.paperwallet = {
 	open: function () {
@@ -12326,9 +12329,13 @@ ninja.wallets.paperwallet = {
 			});
 		}
 		else {
-			var key = new Bitcoin.ECKey(false);
-			var bitcoinAddress = key.getBitcoinAddress();
-			var privateKeyWif = key.getBitcoinWalletImportFormat();
+			//var key = new Bitcoin.ECKey(false);
+			//var bitcoinAddress = key.getBitcoinAddress();
+			//var privateKeyWif = key.getBitcoinWalletImportFormat();
+            
+            var key = StellarBase.Keypair.random();
+            var bitcoinAddress = key.publicKey();
+            var privateKeyWif = key.secret();
 
 			ninja.wallets.paperwallet.showArtisticWallet(idPostFix, bitcoinAddress, privateKeyWif);
 		}
@@ -12343,7 +12350,9 @@ ninja.wallets.paperwallet = {
 		if (ninja.privateKey.isPrivateKey(suppliedKey)) {
 			//alert(ninja.translator.get("detailalertnotvalidprivatekey"));
 		} else {
-			var computedPublicAddress = document.getElementById("suppliedPublicKey").value;
+            kinkeys = StellarBase.Keypair.fromSecret(suppliedKey);
+			//var computedPublicAddress = document.getElementById("suppliedPublicKey").value;
+			var computedPublicAddress = kinkeys.publicKey();
 			if (ninja.wallets.paperwallet.encrypt) {
 				document.getElementById("busyblock").className = "busy";
 				ninja.privateKey.BIP38PrivateKeyToEncryptedKeyAsync(suppliedKey,
@@ -12354,7 +12363,7 @@ ninja.wallets.paperwallet = {
 			}
 			else {
                 console.log(suppliedKey);
-                console.log(computedPublicAddress);
+                console.log(kinkeys.publicKey());
                 
                 
 				ninja.wallets.paperwallet.showArtisticWallet(1, computedPublicAddress, suppliedKey);
@@ -12424,6 +12433,10 @@ ninja.wallets.paperwallet = {
 		document.getElementById("btcaddress1" + idPostFix).innerHTML = bitcoinAddress;
 		document.getElementById("activate" + idPostFix).innerHTML = "Activate Link";
 		document.getElementById("spend" + idPostFix).innerHTML = "Spend Link";
+        
+        var ts = new Date();
+		document.getElementById("text_date").innerHTML = ts.toLocaleString();
+        
 	},
 
 	toggleEncrypt: function (element) {
